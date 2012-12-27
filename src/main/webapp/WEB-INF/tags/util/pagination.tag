@@ -24,8 +24,8 @@
         </c:when>
         <c:otherwise>
           <spring:url value="" var="sizeUrl">
-            <spring:param name="page" value="1" />
-            <spring:param name="size" value="${i}" />
+            <spring:param name="page.page" value="1" />
+            <spring:param name="page.size" value="${i}" />
           </spring:url>
           <a href="${sizeUrl}">${i}</a>
         </c:otherwise>
@@ -36,8 +36,8 @@
 
     <c:if test="${page ne 1}">
       <spring:url value="" var="first">
-        <spring:param name="page" value="1" />
-        <spring:param name="size" value="${size}" />
+        <spring:param name="page.page" value="1" />
+        <spring:param name="page.size" value="${size}" />
       </spring:url>
       <spring:url value="/resources/images/resultset_first.png" var="first_image_url" />
       <spring:message code="list_first" var="first_label" htmlEscape="false" />
@@ -45,8 +45,8 @@
     </c:if>
     <c:if test="${page gt 1}">
       <spring:url value="" var="previous">
-        <spring:param name="page" value="${page - 1}" />
-        <spring:param name="size" value="${size}" />
+        <spring:param name="page.page" value="${page - 1}" />
+        <spring:param name="page.size" value="${size}" />
       </spring:url>
       <spring:url value="/resources/images/resultset_previous.png" var="previous_image_url" />
       <spring:message code="list_previous" var="previous_label" htmlEscape="false" />
@@ -57,8 +57,8 @@
     <c:out value=" " />
     <c:if test="${page lt maxPages}">
       <spring:url value="" var="next">
-        <spring:param name="page" value="${page + 1}" />
-        <spring:param name="size" value="${size}" />
+        <spring:param name="page.page" value="${page + 1}" />
+        <spring:param name="page.size" value="${size}" />
       </spring:url>
       <spring:url value="/resources/images/resultset_next.png" var="next_image_url" />
       <spring:message code="list_next" var="next_label" htmlEscape="false" />
@@ -66,8 +66,8 @@
     </c:if>
     <c:if test="${page ne maxPages}">
       <spring:url value="" var="last">
-        <spring:param name="page" value="${maxPages}" />
-        <spring:param name="size" value="${size}" />
+        <spring:param name="page.page" value="${maxPages}" />
+        <spring:param name="page.size" value="${size}" />
       </spring:url>
       <spring:url value="/resources/images/resultset_last.png" var="last_image_url" />
       <spring:message code="list_last" var="last_label" htmlEscape="false" />

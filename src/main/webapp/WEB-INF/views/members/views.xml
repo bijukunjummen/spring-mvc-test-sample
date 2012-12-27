@@ -7,9 +7,6 @@
     <definition extends="default" name="members/update">
         <put-attribute name="body" value="/WEB-INF/views/members/update.jsp"/>
     </definition>
-    <definition extends="default" name="members/show">
-        <put-attribute name="body" value="/WEB-INF/views/members/show.jsp"/>
-    </definition>
     <definition extends="default" name="members/create">
         <put-attribute name="body" value="/WEB-INF/views/members/create.jsp"/>
     </definition>

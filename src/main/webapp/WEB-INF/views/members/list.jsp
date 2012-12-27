@@ -7,19 +7,45 @@
 <%@ taglib tagdir="/WEB-INF/tags/util" prefix="util"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div>
-	<c:if test="${not empty flashmessage}">
-		<div class="error"><spring:message code="${flashmessage}" /></div>
-	</c:if>
-</div>
+<script type="text/javascript">
 
-<div>
-	<table>
+function deleteMember(deleteUrl){
+	var form = $('<form/>',{
+		action: deleteUrl,
+		method: "POST"
+	});
+	
+	form.append($('<input/>',{
+		type: 'hidden',
+		name: '_method',
+		value: 'DELETE'
+	}));
+	form.append($('<input/>', {
+        type: 'hidden',
+        name: "page",
+        value: "${param.page}"
+    }));
+
+	form.append($('<input/>', {
+        type: 'hidden',
+        name: "size",
+        value: "${param.size}"
+    }));
+	
+	form.appendTo('body').submit();	
+}
+</script>
+<spring:message code="member.delete" var="delete_message" htmlEscape="false" />
+<spring:message code="member.edit" var="edit_message" htmlEscape="false" />
+<div class="row-fluid">
+	<div class="span1">
+	</div>
+	<div class="span8">
+	<table class="table table-condensed table-bordered">
 		<thead>
 			<tr>
 				<th><spring:message code="member.first.name" /></th>
 				<th><spring:message code="member.last.name" /></th>
-				<th></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -28,32 +54,29 @@
 			<tr class="${loopStatus.index % 2 == 0 ? 'odd' : 'even'}">
 				<td><c:out value="${member.first}" /></td>
 				<td><c:out value="${member.last}" /></td>
-				<td><spring:url value="/members/${member.id}" var="update_form_url">
+
+				<td><spring:url value="/members/" var="update_form_url">
 						<spring:param name="form" />
+						<spring:param name="id" value="${member.id}"></spring:param>
 					</spring:url> 
-					<spring:message code="member.edit" var="edit_message" htmlEscape="false" /> 
-					<a href="${update_form_url}">${fn:escapeXml(edit_message)}</a>
-				</td>
-				<td><spring:url value="/members/${member.id}" var="delete_form_url" /> 
-					<form:form action="${delete_form_url}" method="DELETE" id="${course.id}_DELETE_FORM">
-						<input name="page" type="hidden" value="${param.page}" />
-						<input name="size" type="hidden" value="${param.size}" />
-						<spring:message code="member.delete" var="delete_message" htmlEscape="false" />
-						<input type="submit" value="${fn:escapeXml(delete_message)}" class="deletelink" />
-					</form:form>
+					<spring:url value="/members/${member.id}" var="delete_form_url" /> 
+					 
+					<a href="${update_form_url}">${fn:escapeXml(edit_message)}</a> | <a href="#" onclick="javascript:deleteMember('${delete_form_url}')">${delete_message}</a>
 				</td>
 			</tr>
 		</c:forEach>
 		<tr>
 		</tbody>
 	</table>
-	<util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}"></util:pagination>
+	<util:pagination maxPages="${maxPages}" page="${param['page.page']}" size="${param['page.size']}"></util:pagination>
+	<spring:url var="createUrl" value="/members">
+		<spring:param name="form"></spring:param>
+	</spring:url>
+	<spring:message code="member.new" var="add_message" htmlEscape="false" />
+	<div>
+		<a href="${createUrl}">${fn:escapeXml(add_message)}</a>
+	</div>
+	
+	</div>
 </div>
 
-<spring:url var="createUrl" value="/members">
-	<spring:param name="form"></spring:param>
-</spring:url>
-<spring:message code="member.new" var="add_message" htmlEscape="false" />
-<div>
-	<a href="${createUrl}">${fn:escapeXml(add_message)}</a>
-</div>

@@ -6,7 +6,10 @@
 <%@ taglib tagdir="/WEB-INF/tags/util" prefix="util"%>
 
 <spring:url value="/members" var="submitUrl" />
-<div>
+<div class="row-fluid">
+  	<div class="span1">
+	</div>
+  	<div class="span8">
 	<form:form action="${submitUrl}" method="POST" modelAttribute="member">
 		<form:errors cssClass="error" delimiter="&lt;p/&gt;" />
 		<form:hidden id="_id" path="id" />
@@ -27,4 +30,5 @@
 			<input id="proceed" type="submit" value="${fn:escapeXml(save_button)}" />
 		</div>
 	</form:form>
+</div>
 </div>

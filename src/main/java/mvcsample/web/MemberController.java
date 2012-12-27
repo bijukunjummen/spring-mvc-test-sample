@@ -8,10 +8,13 @@ import mvcsample.domain.Member;
 import mvcsample.repositories.MemberRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +34,7 @@ public class MemberController {
         }
         uiModel.asMap().clear();
         this.memberRepository.save(member);
-        return "redirect:/members/" + member.getId().toString();
+        return "redirect:/members";
     }
     
     @RequestMapping(params = "form", produces = "text/html")
@@ -41,27 +44,17 @@ public class MemberController {
     }
 	
 	@RequestMapping(produces="text/html")
-	public String list(@RequestParam(defaultValue="1", value = "page", required = false) Integer page, @RequestParam(defaultValue="10", value="size", required=false) Integer size, Model model){
-        if (page != null || size != null) {
-            model.addAttribute("members", this.memberRepository.findAll(new PageRequest(page.intValue()-1, size)).getContent());
-            float nrOfPages = (float) this.memberRepository.count() / size;
-            model.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        }
+	public String list(Pageable pageable, Model model){
+		Page<Member> members = this.memberRepository.findAll(pageable);
+        model.addAttribute("members", members.getContent());
+        float nrOfPages = members.getTotalPages();
+        model.addAttribute("maxPages", nrOfPages);
 		return "members/list";
 	}
 	
-    @RequestMapping(value = "/{id}", produces = "text/html")
-    public String show(@PathVariable("id") Long id, Model uiModel) {
-    	System.out.println("Show Called..");
-    	Member member = this.memberRepository.findOne(id);
-    	System.out.println(member);
-        uiModel.addAttribute("member", member);
-        return "members/show";
-    }
-
 	
-	@RequestMapping(value="/{id}", params="form", produces="text/html")
-	public String updateForm(@PathVariable("id") Long id, Model uiModel){
+	@RequestMapping(params={"form", "id"}, produces="text/html")
+	public String updateForm(@RequestParam("id") Long id, Model uiModel){
 		populateEditForm(uiModel, this.memberRepository.findOne(id));
 		return "members/update";
 	}
@@ -74,12 +67,12 @@ public class MemberController {
         }
         uiModel.asMap().clear();
         this.memberRepository.save(member);
-        return "redirect:/members/" + member.getId().toString();
+        return "redirect:/members";
     }
 	
 	
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel, HttpServletRequest httpServletRequest) {
+    public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "page.size", required = false) Integer size, Model uiModel, HttpServletRequest httpServletRequest) {
         Member member = this.memberRepository.findOne(id);
         this.memberRepository.delete(member);
         uiModel.asMap().clear();

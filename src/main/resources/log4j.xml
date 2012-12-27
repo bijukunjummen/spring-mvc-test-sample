@@ -10,8 +10,8 @@
 		</layout>
 	</appender>
 	
-	<logger name="com.usi">
-		<level value="info" />
+	<logger name="mvcsample">
+		<level value="debug" />
 	</logger>
 	
 	<logger name="org.springframework">
@@ -21,7 +21,7 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="error" />
 		<appender-ref ref="console" />
 	</root>
 	<!-- trace->debug->info->warn->error->fatal -->	
