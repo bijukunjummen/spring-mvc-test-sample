@@ -22,14 +22,14 @@ function deleteMember(deleteUrl){
 	}));
 	form.append($('<input/>', {
         type: 'hidden',
-        name: "page",
-        value: "${param.page}"
+        name: "page.page",
+        value: "${param['page.page']}"
     }));
 
 	form.append($('<input/>', {
         type: 'hidden',
-        name: "size",
-        value: "${param.size}"
+        name: "page.size",
+        value: "${param['page.size']}"
     }));
 	
 	form.appendTo('body').submit();	

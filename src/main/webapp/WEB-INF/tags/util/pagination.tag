@@ -2,18 +2,22 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<%@ attribute name="maxPages" type="java.lang.Integer" required="true" rtexprvalue="true" description="The maximum number of pages available (ie tableRecordCount / size)" %>
+<%@ attribute name="maxPages" type="java.lang.Integer" required="true" rtexprvalue="true" description="The maximum number of pages available" %>
 <%@ attribute name="page" type="java.lang.Integer" required="false" rtexprvalue="true" description="The current page (not required, defaults to 1)" %>
 <%@ attribute name="size" type="java.lang.Integer" required="false" rtexprvalue="true" description="The number of records per page (not required, defaults to 10)" %>
 
     <c:if test="${empty page || page lt 1}">
       <c:set var="page" value="1" />
     </c:if>
+    
+    <c:if test="${empty maxPages || maxPages lt 1}">
+      <c:set var="maxPages" value="1" />
+    </c:if>
 
     <c:if test="${empty size || size lt 1}">
       <c:set var="size" value="10" />
     </c:if>
-
+    
     <spring:message code="list_size" var="list_size" htmlEscape="false" />
     <c:out value="${list_size} " />
 
