@@ -2,23 +2,17 @@ package mvcsample.domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
+
+import mvcsample.annot.Versioned;
 
 @Entity
 @Table(name="addresses")
 @Access(AccessType.FIELD)
-public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")	
-	private Long id;
+@Versioned
+public class Address extends BaseDomain{
 	
 	private String line1;
 	private String line2;
@@ -28,9 +22,6 @@ public class Address {
 	
 	@ManyToOne
 	private Member member;
-	@Version
-    @Column(name = "version")
-    private Integer version;
 	
 	public String getLine1() {
 		return line1;
@@ -62,18 +53,6 @@ public class Address {
 	}
 	public void setCountry(String country) {
 		this.country = country;
-	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public Integer getVersion() {
-		return version;
-	}
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 	public Member getMember() {
 		return member;
