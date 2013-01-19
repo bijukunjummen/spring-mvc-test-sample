@@ -4,7 +4,30 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <%@ taglib tagdir="/WEB-INF/tags/util" prefix="util"%>
+<spring:message code="member.address.line1" var="addressline1"/>
+<spring:message code="member.address.line2" var="addressline2"/>
+<script type="text/javascript">
+	var addressIndex = 0;
+	function addAddressField(){
+		var fieldset = $("<fieldset/>")
+		fieldset.append($("<legend/>",{
+			html: "Address " + (addressIndex + 1) + ":"
+		}));
+		fieldset.append($('<label/>', {'for':'addressline1',html:'${addressline1}'}));
+		fieldset.append($('<input/>',{
+			type:'text',
+			name:'addresses[' + addressIndex + '].line1'
+		}));
+		fieldset.append($('<label/>', {'for':'addressline2',html:'${addressline2}'}));
+		fieldset.append($('<input/>',{
+			type:'text',
+			name:'addresses[' + addressIndex + '].line2'
+		}));
 
+		fieldset.appendTo($('#addresses'));
+		addressIndex = addressIndex + 1;
+	}
+</script>
 <spring:url value="/members" var="submitUrl" />
 <div class="row-fluid">
   	<div class="span1">
@@ -24,7 +47,9 @@
 		<form:input path="last" />
 		<form:errors cssClass="error" id="lastname_error_id" path="last" />
 		<br />
-
+		
+		<a href="#" onclick="javascript:addAddressField()">Add Address</a>
+		<div id="addresses"></div>
 		<div class="submit" id="submit">
 			<spring:message code="button_save" var="save_button" htmlEscape="false" />
 			<input id="proceed" type="submit" value="${fn:escapeXml(save_button)}" />

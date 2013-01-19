@@ -15,7 +15,7 @@
 
     <context:annotation-config/>
     
-    <context:component-scan base-package="mvcsample">
+    <context:component-scan base-package="mvcsample.dao,mvcsample.repositories">
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
 

@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 @Controller
-@RequestMapping("/rootendpoint")
+@RequestMapping(EndpointDocController.TESTSTRING)
 public class EndpointDocController {
 
 	private final RequestMappingHandlerMapping handlerMapping;
+	
+	public static final String TESTSTRING="Hello";
 
 	@Autowired
 	public EndpointDocController(RequestMappingHandlerMapping handlerMapping) {

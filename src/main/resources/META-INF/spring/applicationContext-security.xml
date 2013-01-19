@@ -18,6 +18,7 @@
         <intercept-url pattern="/resources/**" access="permitAll" />
         <intercept-url pattern="/login/**" access="permitAll" />
         <intercept-url pattern="/registrations/**" access="permitAll" />
+        <intercept-url pattern="/membersjson/**" access="permitAll" />
         <intercept-url pattern="/**" access="isAuthenticated()" />
     </http>
 

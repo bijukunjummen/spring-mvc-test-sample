@@ -10,15 +10,21 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import mvcsample.spring.WebConfig;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -28,9 +34,11 @@ import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 @WebAppConfiguration
-@ContextConfiguration(locations={"classpath:/META-INF/spring/web/mvc-config.xml", "classpath:/META-INF/spring/applicationContext-security.xml", "classpath:/META-INF/spring/applicationContext.xml", "classpath:/META-INF/spring/applicationContext-jpa.xml"})
+@ContextConfiguration //(classes=WebConfig.class, locations={"classpath:/META-INF/spring/applicationContext-security.xml", "classpath:/META-INF/spring/applicationContext.xml", "classpath:/META-INF/spring/applicationContext-jpa.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class MemberJsonControllerTest {
 	private final String createJson = "{\"id\":%d,\"first\":\"%s\",\"last\":\"%s\",\"version\":%d}";
@@ -40,13 +48,14 @@ public class MemberJsonControllerTest {
 	private WebApplicationContext wac;
 	
 	
+	
 	 @Autowired
 	 private FilterChainProxy springSecurityFilterChain;
 	
 
 	private MockMvc mockMvc;
 	
-	private SessionHolder sessionHolder = new SessionHolder();
+//	private SessionHolder sessionHolder = new SessionHolder();
 	
 
 	@Before
@@ -56,69 +65,81 @@ public class MemberJsonControllerTest {
 	private static final String SEC_CONTEXT_ATTR = HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 	@Test
 	public void testAControllerFlow() throws Exception {
-		this.mockMvc.perform(post("/j_spring_security_check")
-				.param("j_username", "fred")
-				.param("j_password", "fredspassword"))
-				.andExpect(status().isMovedTemporarily())
-				.andDo(new ResultHandler() {
-					@Override
-					public void handle(MvcResult result) throws Exception {
-						sessionHolder.setSession(new SessionWrapper(result.getRequest().getSession()));
-					}
-				});
 		
-		this.mockMvc.perform(post("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 1,"One","One", 0).getBytes()).session(sessionHolder.getSession()))
+//		this.mockMvc.perform(post("/resources/j_spring_security_check")
+//				.param("j_username", "fred")
+//				.param("j_password", "fredspassword"))
+//				.andExpect(status().isMovedTemporarily())
+//				.andDo(new ResultHandler() {
+//					@Override
+//					public void handle(MvcResult result) throws Exception {
+//						sessionHolder.setSession(new SessionWrapper(result.getRequest().getSession()));
+//					}
+//				});
+		
+		this.mockMvc.perform(post("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 1,"One","One", 0).getBytes()))
 				.andExpect(status().isOk());
-		this.mockMvc.perform(post("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 2,"Two","Two", 0).getBytes()).session(sessionHolder.getSession()))
+		
+		this.mockMvc.perform(post("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 1,"One","One", 0).getBytes()))
+		.andExpect(status().isOk());
+		
+		this.mockMvc.perform(post("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 2,"Two","Two", 0).getBytes()))
 			.andExpect(status().isOk());
-		this.mockMvc.perform(post("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 3,"Three","Three", 0).getBytes()).session(sessionHolder.getSession()))
+		
+		this.mockMvc.perform(post("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 3,"Three","Three", 0).getBytes()))
 			.andExpect(status().isOk());		
 		
-		this.mockMvc.perform(get("/membersjson").contentType(MediaType.APPLICATION_JSON).session(sessionHolder.getSession()))
+		this.mockMvc.perform(get("/membersjson"))
 				.andExpect(status().isOk())
-				.andExpect(content().string(containsString(membersJson)));
+				.andExpect(content().string(containsString("hk")));
 		
-		this.mockMvc.perform(put("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 1,"One","OneUpdated", 0).getBytes()).session(sessionHolder.getSession()))
+		this.mockMvc.perform(put("/membersjson").contentType(MediaType.APPLICATION_JSON).content(String.format(createJson, 1,"One","OneUpdated", 0).getBytes()))
 			.andExpect(status().isOk());
 		
-		mockMvc.perform(get("/membersjson").contentType(MediaType.APPLICATION_JSON).session(sessionHolder.getSession()))
+		this.mockMvc.perform(get("/membersjson").contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].first").value("One"));
 		
-		mockMvc.perform(get("/membersjson/1").contentType(MediaType.APPLICATION_JSON).session(sessionHolder.getSession()))
+		this.mockMvc.perform(get("/membersjson/1").contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("OneUpdated")));
+			.andExpect(content().string(containsString("One")));
+		
 
 	}
 	
-	private static final class SessionHolder{
-		private SessionWrapper session;
+//	private static final class SessionHolder{
+//		private SessionWrapper session;
+//		
+//
+//		public SessionWrapper getSession() {
+//			return session;
+//		}
+//
+//		public void setSession(SessionWrapper session) {
+//			this.session = session;
+//		}
+//	}
+//	
+//	private static class SessionWrapper extends MockHttpSession{
+//		private final HttpSession httpSession;
+//		
+//		public SessionWrapper(HttpSession httpSession){
+//			this.httpSession = httpSession;
+//		}
+//
+//		@Override
+//		public Object getAttribute(String name) {
+//			return this.httpSession.getAttribute(name);
+//		}
+//		
+//	}
+	
+	@Configuration
+	@Import(WebConfig.class)
+	@ImportResource({"classpath:/META-INF/spring/applicationContext-security.xml", "classpath:/META-INF/spring/applicationContext.xml", "classpath:/META-INF/spring/applicationContext-jpa.xml"})
+	public static class ContextConfig{
 		
-
-		public SessionWrapper getSession() {
-			return session;
-		}
-
-		public void setSession(SessionWrapper session) {
-			this.session = session;
-		}
 	}
-	
-	private static class SessionWrapper extends MockHttpSession{
-		private final HttpSession httpSession;
-		
-		public SessionWrapper(HttpSession httpSession){
-			this.httpSession = httpSession;
-		}
-
-		@Override
-		public Object getAttribute(String name) {
-			return this.httpSession.getAttribute(name);
-		}
-		
-	}
-	
-	
 }
 
 

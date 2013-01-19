@@ -5,26 +5,29 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name="members")
 @Access(AccessType.FIELD)
-
 public class Member{
+	
+	public Member(){}
+	
+	public Member(String first, String last){
+		this.first = first;
+		this.last = last;
+	}
 	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,8 +39,7 @@ public class Member{
 	@Size(min=1)
 	private String last;
 	
-	@ElementCollection
-	@CollectionTable(name="member_addresses", joinColumns=@JoinColumn(name="member_id"))
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="member")
 	private List<Address> addresses = new ArrayList<>();
 	
 	@Version
@@ -81,10 +83,6 @@ public class Member{
 		this.version = version;
 	}
 
-	@Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 
 	public List<Address> getAddresses() {
 		return addresses;
@@ -94,4 +92,11 @@ public class Member{
 		this.addresses = addresses;
 	}
 
+	@Override
+	public String toString() {
+		return "Member [id=" + id + ", first=" + first + ", last=" + last
+				+ ", addresses=" + addresses + ", version=" + version + "]";
+	}
+
+	
 }

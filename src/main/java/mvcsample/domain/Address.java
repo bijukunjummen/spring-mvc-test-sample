@@ -2,17 +2,36 @@ package mvcsample.domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Embeddable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
-@Embeddable
+@Entity
+@Table(name="addresses")
 @Access(AccessType.FIELD)
 public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")	
+	private Long id;
+	
 	private String line1;
 	private String line2;
 	private String city;
 	private String state;
-
-
+	private String country;
+	
+	@ManyToOne
+	private Member member;
+	@Version
+    @Column(name = "version")
+    private Integer version;
+	
 	public String getLine1() {
 		return line1;
 	}
@@ -37,11 +56,31 @@ public class Address {
 	public void setState(String state) {
 		this.state = state;
 	}
-	@Override
-	public String toString() {
-		return "Address [line1=" + line1 + ", line2=" + line2 + ", city="
-				+ city + ", state=" + state + "]";
+
+	public String getCountry() {
+		return country;
 	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Integer getVersion() {
+		return version;
+	}
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+	public Member getMember() {
+		return member;
+	}
+	public void setMember(Member member) {
+		this.member = member;
+	}	
 	
 	
 }

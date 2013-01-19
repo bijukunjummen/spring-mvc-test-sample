@@ -1,9 +1,13 @@
 package mvcsample.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import mvcsample.domain.Address;
 import mvcsample.domain.Member;
+import mvcsample.repositories.AddressRepository;
 import mvcsample.repositories.MemberRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MemberController {
 	
 	@Autowired MemberRepository memberRepository;
-	
+	@Autowired AddressRepository addressRepository;
 		
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid Member member, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
@@ -32,6 +36,14 @@ public class MemberController {
         }
         uiModel.asMap().clear();
         this.memberRepository.save(member);
+        //persist all the associated addresses
+        List<Address> addresses = member.getAddresses();
+        if (addresses!=null) {
+        	for (Address address: addresses) {
+        		address.setMember(member);
+        		this.addressRepository.save(address);
+        	}
+        }
         return "redirect:/members";
     }
     
@@ -65,6 +77,14 @@ public class MemberController {
         }
         uiModel.asMap().clear();
         this.memberRepository.save(member);
+        //persist all the associated addresses
+        List<Address> addresses = member.getAddresses();
+        if (addresses!=null) {
+        	for (Address address: addresses) {
+        		address.setMember(member);
+        		this.addressRepository.save(address);
+        	}
+        }       
         return "redirect:/members";
     }
 	
