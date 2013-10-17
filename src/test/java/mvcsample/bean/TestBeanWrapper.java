@@ -6,12 +6,16 @@ import org.junit.Test;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.PropertyValue;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.format.support.DefaultFormattingConversionService;
 
 public class TestBeanWrapper {
 
 	@Test
 	public void testBeanWrapper() {
 		BeanWrapper memberWrapped = new BeanWrapperImpl(new Member());
+		ConversionService conversionService = new DefaultFormattingConversionService();
+		memberWrapped.setConversionService(conversionService );
 		memberWrapped.setAutoGrowNestedPaths(true);
 		PropertyValue pv1 = new PropertyValue("first", "john");
 		PropertyValue pv2 = new PropertyValue("last", "doe");

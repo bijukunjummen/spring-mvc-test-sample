@@ -43,10 +43,9 @@ public class MemberController {
 	
 	@RequestMapping(produces="text/html")
 	public String list(Pageable pageable, Model model){
+		System.out.println(pageable);
 		Page<Member> members = this.memberRepository.findMembers(pageable);
-        model.addAttribute("members", members.getContent());
-        float nrOfPages = members.getTotalPages();
-        model.addAttribute("maxPages", nrOfPages);
+        model.addAttribute("members", members);
 		return "members/list";
 	}
 	
@@ -67,8 +66,7 @@ public class MemberController {
         this.memberRepository.save(member);
         return "redirect:/members";
     }
-	
-	
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String delete(@PathVariable("id") Long id, @RequestParam(value = "page.page", required = false) Integer page, @RequestParam(value = "page.size", required = false) Integer size, Model uiModel, HttpServletRequest httpServletRequest) {
         Member member = this.memberRepository.findOne(id);

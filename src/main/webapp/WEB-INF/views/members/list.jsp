@@ -22,14 +22,14 @@ function deleteMember(deleteUrl){
 	}));
 	form.append($('<input/>', {
         type: 'hidden',
-        name: "page.page",
-        value: "${param['page.page']}"
+        name: "page",
+        value: "${param['page']}"
     }));
 
 	form.append($('<input/>', {
         type: 'hidden',
-        name: "page.size",
-        value: "${param['page.size']}"
+        name: "size",
+        value: "${param['size']}"
     }));
 	
 	form.appendTo('body').submit();	
@@ -41,42 +41,47 @@ function deleteMember(deleteUrl){
 	<div class="span1">
 	</div>
 	<div class="span8">
-	<table class="table table-condensed table-bordered">
-		<thead>
-			<tr>
-				<th><spring:message code="member.first.name" /></th>
-				<th><spring:message code="member.last.name" /></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-		<c:forEach items="${members}" var="member" varStatus="loopStatus">
-			<tr class="${loopStatus.index % 2 == 0 ? 'odd' : 'even'}">
-				<td><c:out value="${member.first}" /></td>
-				<td><c:out value="${member.last}" /></td>
-
-				<td><spring:url value="/members/" var="update_form_url">
-						<spring:param name="form" />
-						<spring:param name="id" value="${member.id}"></spring:param>
-					</spring:url> 
-					<spring:url value="/members/${member.id}" var="delete_form_url" /> 
-					 
-					<a href="${update_form_url}">${fn:escapeXml(edit_message)}</a> | <a href="#" onclick="javascript:deleteMember('${delete_form_url}')">${delete_message}</a>
-				</td>
-			</tr>
-		</c:forEach>
-		<tr>
-		</tbody>
-	</table>
-	<util:pagination maxPages="${maxPages}" page="${param['page.page']}" size="${param['page.size']}"></util:pagination>
-	<spring:url var="createUrl" value="/members">
-		<spring:param name="form"></spring:param>
-	</spring:url>
-	<spring:message code="member.new" var="add_message" htmlEscape="false" />
-	<div>
-		<a href="${createUrl}">${fn:escapeXml(add_message)}</a>
-	</div>
+		<div class="row-fluid">
+		<table class="table table-condensed table-bordered">
+			<thead>
+				<tr>
+					<th><spring:message code="member.first.name" /></th>
+					<th><spring:message code="member.last.name" /></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			<c:forEach items="${members.content}" var="member" varStatus="loopStatus">
+				<tr class="${loopStatus.index % 2 == 0 ? 'odd' : 'even'}">
+					<td><c:out value="${member.first}" /></td>
+					<td><c:out value="${member.last}" /></td>
 	
+					<td><spring:url value="/members/" var="update_form_url">
+							<spring:param name="form" />
+							<spring:param name="id" value="${member.id}"></spring:param>
+						</spring:url> 
+						<spring:url value="/members/${member.id}" var="delete_form_url" /> 
+						 
+						<a href="${update_form_url}">${fn:escapeXml(edit_message)}</a> | <a href="#" onclick="javascript:deleteMember('${delete_form_url}')">${delete_message}</a>
+					</td>
+				</tr>
+			</c:forEach>
+			<tr>
+			</tbody>
+		</table>
+		</div>
+		<div class="row-fluid">
+			<util:pagination thispage="${members}"></util:pagination>
+		</div>
+		<div class="row-fluid">
+			<spring:url var="createUrl" value="/members">
+				<spring:param name="form"></spring:param>
+			</spring:url>
+			<spring:message code="member.new" var="add_message" htmlEscape="false" />
+			<div>
+				<a href="${createUrl}">${fn:escapeXml(add_message)}</a>
+			</div>
+		</div>
 	</div>
 </div>
 

@@ -30,9 +30,19 @@
 
 	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver" />
 
-	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" id="tilesViewResolver">
+	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" id="tilesViewResolver" p:order="1">
 		<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
 	</bean>
+	
+	<bean id="jspViewResolver"
+    	      class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:order="2">
+              <property name="prefix">
+                  <value>/WEB-INF/pages/</value>
+               </property>
+              <property name="suffix">
+                 <value>.jsp</value>
+              </property>
+        </bean>
 	
 	<bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer" id="tilesConfigurer">
 		<property name="definitions">
