@@ -1,6 +1,11 @@
 package mvcsample.config;
 
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
 
 public class CustomWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -19,4 +24,11 @@ public class CustomWebAppInitializer extends AbstractAnnotationConfigDispatcherS
 	protected String[] getServletMappings() {
 		return new String[]{"/"};
 	}
+
+    @Override
+    protected Filter[] getServletFilters() {
+        return new Filter[]{new HiddenHttpMethodFilter(), new MultipartFilter(), new OpenEntityManagerInViewFilter()};
+    }
+
+
 }

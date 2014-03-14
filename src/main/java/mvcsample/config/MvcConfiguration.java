@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesView;
@@ -65,4 +66,12 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 		tilesConfigurer.setDefinitions(new String[]{"/WEB-INF/layouts/layouts.xml", "/WEB-INF/views/**/views.xml" });
 		return tilesConfigurer;
 	}
+
+    @Bean
+    public InternalResourceViewResolver jspViewResolver() {
+        InternalResourceViewResolver jspViewResolver = new InternalResourceViewResolver();
+        jspViewResolver.setPrefix("/WEB-INF/pages/");
+        jspViewResolver.setSuffix(".jsp");
+        return jspViewResolver;
+    }
 }
