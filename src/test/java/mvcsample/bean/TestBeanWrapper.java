@@ -8,6 +8,9 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.PropertyValue;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.format.support.DefaultFormattingConversionService;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 
 public class TestBeanWrapper {
 
@@ -30,5 +33,23 @@ public class TestBeanWrapper {
 		Member member = (Member)memberWrapped.getWrappedInstance();
 		System.out.println(member.getAddresses());
 	}
+	
+	@Test
+	public void testUser() {
+		User user = new User();
+		user.setUserName("userName");
+		BeanWrapper wrapper = new BeanWrapperImpl(user);
+		System.out.println(wrapper.getPropertyValue("userName"));
+		Errors errors = new BeanPropertyBindingResult(user, "user");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "invalid.username");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors,"password","passwordtxt", "Password should not be empty");
+		System.out.println(errors);
+	}
 
+	@Test
+	public void testModelWithMap() {
+		Model model = new Model();
+		BeanWrapper wrapper = new BeanWrapperImpl(model);
+		System.out.println(wrapper.getPropertyValue("submodel.props[name]"));
+	}
 }

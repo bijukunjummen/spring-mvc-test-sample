@@ -8,6 +8,10 @@
 	<definition extends="public" name="login">
 		<put-attribute name="body" value="/WEB-INF/views/login.jsp" />
 	</definition>
+	
+	<definition extends="public" name="endpointdoc">
+		<put-attribute name="body" value="/WEB-INF/views/endpointdoc.jsp" />
+	</definition>	
 
 
 </tiles-definitions>

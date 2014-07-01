@@ -4,26 +4,23 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.annotation.Order;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesView;
 
-@EnableWebMvc
-@EnableSpringDataWebSupport
+@Configuration
 @ComponentScan(basePackages = "mvcsample.web", useDefaultFilters = false, includeFilters = @Filter(type = FilterType.ANNOTATION, value = Controller.class))
-public class MvcConfiguration extends WebMvcConfigurerAdapter {
+public class MvcConfiguration extends WebMvcConfigurationSupport {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
@@ -56,7 +53,6 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	@Order(1)
 	public UrlBasedViewResolver tilesViewResolver() {
 		UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
 		viewResolver.setViewClass(TilesView.class);
@@ -71,13 +67,13 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 						"/WEB-INF/views/**/views.xml" });
 		return tilesConfigurer;
 	}
-
+	
 	@Bean
-	@Order(2)
-	public InternalResourceViewResolver jspViewResolver() {
-		InternalResourceViewResolver jspViewResolver = new InternalResourceViewResolver();
-		jspViewResolver.setPrefix("/WEB-INF/pages/");
-		jspViewResolver.setSuffix(".jsp");
-		return jspViewResolver;
-	}
+	@Override
+	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+		RequestMappingHandlerMapping handlerMapping = super.requestMappingHandlerMapping();
+		return handlerMapping;
+	}	
+	
+	
 }
