@@ -72,6 +72,7 @@ public class MvcConfiguration extends WebMvcConfigurationSupport {
 	@Override
 	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
 		RequestMappingHandlerMapping handlerMapping = super.requestMappingHandlerMapping();
+		handlerMapping.setUseSuffixPatternMatch(false);
 		return handlerMapping;
 	}	
 	
