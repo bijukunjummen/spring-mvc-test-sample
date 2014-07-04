@@ -25,12 +25,12 @@ public class MemberController {
 	MemberRepository memberRepository;
 
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
-	public String create(@Valid Member member, BindingResult bindingResult,
+	public String create(@Valid Member member,
 			Model uiModel, HttpServletRequest httpServletRequest) {
-		if (bindingResult.hasErrors()) {
-			populateEditForm(uiModel, member);
-			return "members/create";
-		}
+//		if (bindingResult.hasErrors()) {
+//			populateEditForm(uiModel, member);
+//			return "members/create";
+//		}
 		uiModel.asMap().clear();
 		this.memberRepository.save(member);
 		return "redirect:/members";
