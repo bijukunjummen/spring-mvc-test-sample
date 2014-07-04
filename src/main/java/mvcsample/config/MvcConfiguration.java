@@ -19,8 +19,8 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
-import org.springframework.web.servlet.view.tiles2.TilesView;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesView;
 
 @Configuration
 @ComponentScan(basePackages = "mvcsample.web", useDefaultFilters = false, includeFilters = @Filter(type = FilterType.ANNOTATION, value = Controller.class))
